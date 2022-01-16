@@ -52,6 +52,7 @@ func NewConnection(server iserverface.IServer,wsSocket *websocket.Conn, connId u
 
 //开始
 func (c *Connection) Start() {
+	c.Server.CallOnConnStart(c)
 	go c.readLoop()
 	go c.writeLoop()
 }
@@ -66,6 +67,7 @@ func (c *Connection) Close() {
 		close(c.closeChan)
 	}
 	c.Server.GetConnMgr().Remove(c)
+	c.Server.CallOnConnStop(c)
 }
 
 //获取链接对象
